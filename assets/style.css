@@ -1,21 +1,24 @@
-*  {
-    color: blueviolet;
-    font-family: Helvetica, Arial, sans-serif;
-}
-
-.row {
-    display: flex;
-    flex-flow: row wrap;
-}
-
-.center-align {
-    align-items: center;
+* {
+	box-sizing: border-box;
+	margin: 0;
 }
 
 header {
-    text-align: center;
+	text-align: center;
+	color: white;
+	padding: 20px;
+	background-color: rgb(85, 28, 91);
 }
 
-.main {
-    margin: 2rem;
+#city-info {
+	margin: 10px;
+}
+
+.sidebar {
+	background-color: rgb(194, 168, 220);
+	padding: 10px;
+}
+
+.daycard {
+	margin: 10px;
 }
