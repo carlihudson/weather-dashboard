@@ -2,7 +2,7 @@ var searchInput = document.getElementById('search-input');
 var searchButton = document.getElementById('search-button');
 var searchIndex = document.getElementById('search-index');
 var currentCity = document.getElementById('current-city');
-var cityName = document.getElementById('city-name');
+var cityNameElm = document.getElementById('city-name');
 var temp = document.getElementById('temperature');
 var humid = document.getElementById('humidity');
 var wind = document.getElementById('wind')
@@ -13,7 +13,15 @@ var wind = document.getElementById('wind')
 $('#search-button').on('click', function(event) {
     event.preventDefault();
     var city = $('#search-input').val();
-    console.log(city);
+
+    if(city) {
+        searchResults(city);
+        searchInput.value = '';
+
+    } else {
+        cityNameElm.textContent = '';
+        alert('Please enter a city')
+    }
 
 }
 )
@@ -21,9 +29,10 @@ $('#search-button').on('click', function(event) {
 function searchResults() {
     var result = $('#search-input').val();
     var api = 'https://api.openweathermap.org/geo/1.0/direct';
-    weatherCoordsApi = weatherCoordsApi + '?q=' + result + '&limit=&appid=6e0b8bf6700882e16a2de97e399e225b';
+    api = api + '?q=' + result + '&limit=&appid=6e0b8bf6700882e16a2de97e399e225b';
+  
 
-    fetch(weatherCoordsApi)
+    fetch(api)
         .then(function (response) {
             return response.json();
         })
@@ -33,6 +42,7 @@ function searchResults() {
             var cityName = searchedCity.name;
             var latitude = searchedCity.lat;
             var longitude = searchedCity.lon;
+            console.log(longitude)
 
             var key = "6e0b8bf6700882e16a2de97e399e225b";
 
@@ -40,26 +50,41 @@ function searchResults() {
             weatherForecastApi = weatherForecastApi + '?lat=' + latitude + '&lon=' + longitude + '&appid=' + key;
 
             var currentDate = dayjs().format('MM/DD/YYYY');
-            cityName.textContent = cityName + ' ' + currentDate;
-            console.log(cityName)
+            var cityNameAndDate = cityName + ' ' + currentDate;
+
+            cityNameElm.append(cityNameAndDate)
 
             fetch(weatherForecastApi)
                 .then(function (response) {
                     return response.json();
+            
                 })
-                .then(function (response) {
-                    var todaysWeather = response[0];
-                    var currentTemp = todaysWeather.main.temp;
-                    var humidity = todaysWeather.main.humidity;
-                    var windSpeed = todaysWeather.wind.speed;
-                    var iconsUrl = 'http://openweathermap.org/img/wn/' + todayForecast.weather[0].icon + '@2x.png';
-                    var icon = document.createElement('img');
+                .then(function (response) { 
+                    
+                    console.log(response.list)
 
-                    icon.setAttribute('src', iconsUrl);
-                    cityName.append(icon);
-                    temp.textContent = 'Temp: ' + currentTemp;
-                    humid.textContent = 'Humidity: ' + humidity;
-                    wind.textContent = 'Wind: ' + windSpeed;
+                    var todaysWeather = response.list;
+
+                    for(var i = 0; i < 5; i++) {
+                        todaysWeather[i]
+                        console.log(todaysWeather[i])
+                        console.log(todaysWeather[i].weather)
+                        console.log(todaysWeather[i].weather[0].description)
+
+                    }
+
+                    // var currentTemp = todaysWeather.main.temp;
+                    // var humidity = todaysWeather.main.humidity;
+                    // var windSpeed = todaysWeather.wind.speed;
+                    // var iconsUrl = 'http://openweathermap.org/img/wn/' + todayForecast.weather[0].icon + '@2x.png';
+                    // var icon = document.createElement('img');
+
+                
+                    // icon.setAttribute('src', iconsUrl);
+                    // cityName.append(icon);
+                    // temp.textContent = 'Temp: ' + currentTemp;
+                    // humid.textContent = 'Humidity: ' + humidity;
+                    // wind.textContent = 'Wind: ' + windSpeed;
                     
                 }
                 )
